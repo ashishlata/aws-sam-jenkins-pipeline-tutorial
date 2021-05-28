@@ -10,7 +10,7 @@ pipeline {
     }
     stage('Build') {
       steps {
-        sh 'sam build'
+        sh 'sudo sam build'
         stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
       }
     }
