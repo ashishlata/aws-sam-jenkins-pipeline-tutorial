@@ -18,6 +18,7 @@ exports.lambdaHandler = async (event, context) => {
   try {
     // const ret = await axios(url);
     // dummy change
+    console.log('this is for testing')
     response = {
       statusCode: 200,
       body: JSON.stringify({
