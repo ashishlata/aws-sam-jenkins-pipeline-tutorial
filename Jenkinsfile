@@ -15,6 +15,7 @@ pipeline {
     stage('install sam-cli'){
         steps{
             sh 'pip install aws-sam-cli'
+            sh 'sudo apt install python3-testresources'
             stash includes: '**/venv/**/*', name: 'venv'
         }
     }
