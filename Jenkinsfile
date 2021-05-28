@@ -7,7 +7,7 @@ pipeline {
       steps {
         sh """
         pip install virtualenv
-        python -m virtualenv venv
+        python3 -m virtualenv venv
         . venv/bin/activate
         pip install aws-sam-cli
         """
