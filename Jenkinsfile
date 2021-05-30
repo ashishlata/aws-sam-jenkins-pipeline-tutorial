@@ -21,7 +21,7 @@ pipeline {
                     stages{
                         stage('Build') {
                                 steps {
-                                    dir('Services/Services_1'){
+                                    dir('Services/Service_1'){
                                         unstash 'venv'
                                         sh '~/venv/bin/sam build'
                                         stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
@@ -34,7 +34,7 @@ pipeline {
                                 S3_BUCKET = 'sam-jenkins-demo-us-west-2-ashish'
                             }
                             steps {
-                                dir('Services/Services_1'){
+                                dir('Services/Service_1'){
                                     withAWS(credentials: 'Ashish-User', region: 'us-west-2') {
                                     unstash 'venv'
                                     unstash 'aws-sam'
@@ -51,7 +51,7 @@ pipeline {
                                 S3_BUCKET = 'sam-jenkins-demo-us-east-1-ashish'
                             }
                             steps {
-                                dir('Services/Services_1'){
+                                dir('Services/Service_1'){
                                     withAWS(credentials: 'Ashish-User', region: 'us-east-1') {
                                     unstash 'venv'
                                     unstash 'aws-sam'
