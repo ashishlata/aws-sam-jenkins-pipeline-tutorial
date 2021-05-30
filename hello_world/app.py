@@ -4,7 +4,7 @@ import json
 
 
 def lambda_handler(event, context):
-    print('this is sample python file')
+    print('this is 1')
     """Sample pure Lambda function
 
     Parameters

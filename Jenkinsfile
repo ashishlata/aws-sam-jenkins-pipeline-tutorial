@@ -15,11 +15,19 @@ pipeline {
       }
     }
     stage('Build') {
-      steps {
-        unstash 'venv'
-        sh 'venv/bin/sam build'
-        stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
-      }
+        parallel {
+            stage('Build for service 1') {
+                    agent {
+                        label "for-service-1"
+                    }
+                    steps {
+                        echo "On Branch A"
+                        unstash 'venv'
+                        sh 'venv/bin/sam build'
+                        stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
+                    }
+                }
+        }
     }
     stage('beta') {
       environment {
