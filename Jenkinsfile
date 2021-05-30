@@ -2,17 +2,6 @@ pipeline {
   agent any
  
   stages {
-
-    stage('install sam-cli') {
-      steps {
-        sh """
-        pip install virtualenv
-        python3 -m virtualenv venv
-        . venv/bin/activate
-        """
-        stash includes: '**/venv/**/*', name: 'venv'
-      }
-    }
     stage('Build and Deploy') {
         parallel {
             stage('service 1 execution') {
@@ -20,9 +9,8 @@ pipeline {
                         stage('Build') {
                             steps {
                                 dir('Services/Services_1'){
-                                    unstash 'venv'
                                     sh 'pip install aws-sam-cli'
-                                    sh 'venv/bin/Services/Services_1/sam build'
+                                    sh 'Services/Services_1/sam build'
                                     stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
 
                                 }
@@ -36,9 +24,8 @@ pipeline {
                             steps {
                                 dir('Services/Services_1'){
                                     withAWS(credentials: 'Ashish-User', region: 'us-west-2') {
-                                    unstash 'venv'
                                     unstash 'aws-sam'
-                                    sh 'venv/bin/Services/Services_1/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                    sh 'Services/Services_1/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
                                     }
 
                                 }
@@ -53,9 +40,8 @@ pipeline {
                             steps {
                                 dir('Services/Services_1'){
                                     withAWS(credentials: 'Ashish-User', region: 'us-east-1') {
-                                    unstash 'venv'
                                     unstash 'aws-sam'
-                                    sh 'venv/bin/Services/Services_1/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                    sh 'Services/Services_1/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
                                     }
                                 }
                                 
