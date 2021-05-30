@@ -9,7 +9,10 @@ pipeline {
                         stage('Build') {
                             steps {
                                 dir('Services/Services_1'){
+                                    sh 'pwd'
                                     sh 'pip install aws-sam-cli'
+                                    sh 'pwd'
+                                    sh 'sam --version'
                                     sh 'sam build'
                                     stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
 
