@@ -17,10 +17,6 @@ pipeline {
     stage('Build and Deploy') {
         parallel {
             stage('service 1 execution') {
-                    agent {
-                        label "for-service-1"
-                    }
-
                     stages{
                         stage('Build') {
                             steps {
