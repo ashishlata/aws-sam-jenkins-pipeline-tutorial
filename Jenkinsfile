@@ -19,13 +19,13 @@ pipeline {
             stage('service 1 execution') {
                     stages{
                         stage('Build') {
-                            dir('Services/Services_1'){
                                 steps {
-                                    unstash 'venv'
-                                    sh '~/venv/bin/sam build'
-                                    stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
+                                    dir('Services/Services_1'){
+                                        unstash 'venv'
+                                        sh '~/venv/bin/sam build'
+                                        stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
+                                    }
                                 }
-                            }
                         }
                         stage('beta') {
                             environment {
