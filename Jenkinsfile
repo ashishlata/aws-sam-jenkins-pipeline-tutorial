@@ -14,46 +14,51 @@ pipeline {
         stash includes: '**/venv/**/*', name: 'venv'
       }
     }
-    stage('Build') {
+    stage('Build and Deploy') {
         parallel {
-            stage('Build for service 1') {
+            stage('service 1 execution') {
                     agent {
                         label "for-service-1"
                     }
-                    steps {
-                        echo "On Branch A"
-                        unstash 'venv'
-                        sh 'venv/bin/sam build'
-                        stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
+
+                    stages{
+                        stage('Build') {
+                            steps {
+                                unstash 'venv'
+                                sh 'venv/bin/sam build'
+                                stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
+                            }
+                        }
+                        stage('beta') {
+                            environment {
+                                STACK_NAME = 'sam-app-beta-stage'
+                                S3_BUCKET = 'sam-jenkins-demo-us-west-2-ashish'
+                            }
+                            steps {
+                                withAWS(credentials: 'Ashish-User', region: 'us-west-2') {
+                                unstash 'venv'
+                                unstash 'aws-sam'
+                                sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                }
+                            }
+                        }
+                        stage('prod') {
+                            environment {
+                                STACK_NAME = 'sam-app-prod-stage'
+                                S3_BUCKET = 'sam-jenkins-demo-us-east-1-ashish'
+                            }
+                            steps {
+                                withAWS(credentials: 'Ashish-User', region: 'us-east-1') {
+                                unstash 'venv'
+                                unstash 'aws-sam'
+                                sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                }
+                            }
+                        }
                     }
+                    
                 }
         }
-    }
-    stage('beta') {
-      environment {
-        STACK_NAME = 'sam-app-beta-stage'
-        S3_BUCKET = 'sam-jenkins-demo-us-west-2-ashish'
-      }
-      steps {
-        withAWS(credentials: 'Ashish-User', region: 'us-west-2') {
-          unstash 'venv'
-          unstash 'aws-sam'
-          sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
-        }
-      }
-    }
-    stage('prod') {
-      environment {
-        STACK_NAME = 'sam-app-prod-stage'
-        S3_BUCKET = 'sam-jenkins-demo-us-east-1-ashish'
-      }
-      steps {
-        withAWS(credentials: 'Ashish-User', region: 'us-east-1') {
-          unstash 'venv'
-          unstash 'aws-sam'
-          sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
-        }
-      }
     }
   }
 }
