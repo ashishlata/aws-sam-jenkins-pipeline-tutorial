@@ -22,7 +22,7 @@ pipeline {
                                 dir('Services/Services_1'){
                                     unstash 'venv'
                                     sh 'pip install aws-sam-cli'
-                                    sh 'sam build'
+                                    sh 'venv/bin/Services/Services_1/sam build'
                                     stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
 
                                 }
@@ -38,7 +38,7 @@ pipeline {
                                     withAWS(credentials: 'Ashish-User', region: 'us-west-2') {
                                     unstash 'venv'
                                     unstash 'aws-sam'
-                                    sh 'sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                    sh 'venv/bin/Services/Services_1/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
                                     }
 
                                 }
@@ -55,7 +55,7 @@ pipeline {
                                     withAWS(credentials: 'Ashish-User', region: 'us-east-1') {
                                     unstash 'venv'
                                     unstash 'aws-sam'
-                                    sh 'sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                    sh 'venv/bin/Services/Services_1/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
                                     }
                                 }
                                 
