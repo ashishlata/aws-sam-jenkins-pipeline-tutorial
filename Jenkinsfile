@@ -31,10 +31,6 @@ pipeline {
           unstash 'venv'
           unstash 'aws-sam'
           sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
-          dir ('hello-world') {
-            sh 'npm ci'
-            sh 'npm run integ-test'
-          }
         }
       }
     }
