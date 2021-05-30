@@ -9,7 +9,6 @@ pipeline {
         pip install virtualenv
         python3 -m virtualenv venv
         . venv/bin/activate
-        pip install aws-sam-cli
         """
         stash includes: '**/venv/**/*', name: 'venv'
       }
@@ -22,6 +21,7 @@ pipeline {
                             steps {
                                 dir('Services/Services_1'){
                                     unstash 'venv'
+                                    sh 'pip install aws-sam-cli'
                                     sh 'sam build'
                                     stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
 
