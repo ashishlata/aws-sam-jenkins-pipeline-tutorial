@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-        branch = 'master'
+        //branch = 'master'
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
         //scmUrl = 'ssh://git@myScmServer.com/repos/myRepo.git'
         //serverPort = '8080'
@@ -20,7 +20,6 @@ pipeline {
         python3 -m virtualenv venv
         . venv/bin/activate
         pip install aws-sam-cli
-        cp -rf venv /var/lib/jenkins/
         """
         stash includes: '**/venv/**/*', name: 'venv'
       }
