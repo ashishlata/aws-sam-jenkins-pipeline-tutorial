@@ -16,9 +16,11 @@ pipeline {
       steps {
         sh """
         pip3 install virtualenv
-        python3 -m virtualenv /var/lib/jenkins/venv 
-        /var/lib/jenkins/ venv/bin/activate
+        sudo su
+        python3 -m virtualenv venv 
+        . venv/bin/activate
         pip3 install aws-sam-cli
+        mv -rf venv /var/lib/jenkins/
         """
         stash includes: '**/venv/**/*', name: 'venv'
       }
@@ -31,7 +33,7 @@ pipeline {
                                 steps {
                                     dir('Services/Service_1'){
                                         unstash 'venv'
-                                        sh '/var/lib/jenkins/venv/bin/sam build'
+                                        sh 'venv/bin/sam build'
                                         stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
                                     }
                                 }
@@ -46,7 +48,7 @@ pipeline {
                                     withAWS(credentials: 'Ashish-User', region: 'us-west-2') {
                                     unstash 'venv'
                                     unstash 'aws-sam'
-                                    sh 'var/lib/jenkins/venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                    sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
                                     }
 
                                 }
@@ -63,7 +65,7 @@ pipeline {
                                     withAWS(credentials: 'Ashish-User', region: 'us-east-1') {
                                     unstash 'venv'
                                     unstash 'aws-sam'
-                                    sh 'var/lib/jenkins/venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
+                                    sh 'venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
                                     }
 
                                 }
