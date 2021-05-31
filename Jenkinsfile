@@ -1,5 +1,16 @@
 pipeline {
   agent any
+
+  environment {
+        branch = 'master'
+        BUILD_NUMBER = "${env.BUILD_NUMBER}"
+        email = 'ashishlata1995@gmail.com'
+        //scmUrl = 'ssh://git@myScmServer.com/repos/myRepo.git'
+        //serverPort = '8080'
+        //developmentServer = 'dev-myproject.mycompany.com'
+        //stagingServer = 'staging-myproject.mycompany.com'
+        //productionServer = 'production-myproject.mycompany.com'
+    }
  
   stages {
 
@@ -64,59 +75,18 @@ pipeline {
                         }
                     }
                     
-                }
-            stage('service 2 execution') {
-                    stages{
-                        stage('Build') {
-                                steps {
-                                    dir('Services/Service_2'){
-                                        unstash 'venv'
-                                        sh '~/venv/bin/sam build'
-                                        stash includes: '**/.aws-sam/**/*', name: 'aws-sam'
-                                    }
-                                }
-                        }
-                        stage('beta') {
-                            environment {
-                                STACK_NAME = 'sam-app-beta-stage-service-2'
-                                S3_BUCKET = 'sam-jenkins-demo-us-west-2-ashish'
-                            }
-                            steps {
-                                dir('Services/Service_2'){
-                                    withAWS(credentials: 'Ashish-User', region: 'us-west-2') {
-                                    unstash 'venv'
-                                    unstash 'aws-sam'
-                                    sh '~/venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
-                                    }
-
-                                }
-                                
-                            }
-                        }
-                        stage('prod') {
-                            environment {
-                                STACK_NAME = 'sam-app-prod-stage-service-2'
-                                S3_BUCKET = 'sam-jenkins-demo-us-east-1-ashish'
-                            }
-                            steps {
-                                dir('Services/Service_2'){
-                                    withAWS(credentials: 'Ashish-User', region: 'us-east-1') {
-                                    unstash 'venv'
-                                    unstash 'aws-sam'
-                                    sh '~/venv/bin/sam deploy --stack-name $STACK_NAME -t template.yaml --s3-bucket $S3_BUCKET --capabilities CAPABILITY_IAM'
-                                    }
-
-                                }
-                               
-                            }
-                        }
-                    }
-                    
-                }
-            
-            
+            }
         }
 
     }
   }
+  post {
+      success {
+          mail to: ${env.email}, subject: 'Pipeline succeed', body: "${env.BUILD_NUMBER}"
+
+      }
+      failure {
+          mail to: ${env.email}, subject: 'Pipeline failed', body: "${env.BUILD_NUMBER}"
+        }
+    }
 }
