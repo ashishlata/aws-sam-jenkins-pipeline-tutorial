@@ -5,7 +5,6 @@ pipeline {
         //branch = 'master'
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
         //scmUrl = 'ssh://git@myScmServer.com/repos/myRepo.git'
-        //serverPort = '8080'
         //developmentServer = 'dev-myproject.mycompany.com'
         //stagingServer = 'staging-myproject.mycompany.com'
         //productionServer = 'production-myproject.mycompany.com'
