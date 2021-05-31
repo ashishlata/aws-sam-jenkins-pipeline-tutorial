@@ -4,7 +4,6 @@ pipeline {
   environment {
         branch = 'master'
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
-        email = 'ashishlata1995@gmail.com'
         //scmUrl = 'ssh://git@myScmServer.com/repos/myRepo.git'
         //serverPort = '8080'
         //developmentServer = 'dev-myproject.mycompany.com'
@@ -82,11 +81,11 @@ pipeline {
   }
   post {
       success {
-          mail to: ${env.email}, subject: 'Pipeline succeed', body: "${env.BUILD_NUMBER}"
+          mail to: 'ashishlata1995@gmail.com', subject: 'Pipeline succeed', body: "${env.BUILD_NUMBER}"
 
       }
       failure {
-          mail to: ${env.email}, subject: 'Pipeline failed', body: "${env.BUILD_NUMBER}"
+          mail to: 'ashishlata1995@gmail.com', subject: 'Pipeline failed', body: "${env.BUILD_NUMBER}"
         }
     }
 }
