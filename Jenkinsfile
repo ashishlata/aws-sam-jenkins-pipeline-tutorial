@@ -79,13 +79,4 @@ pipeline {
 
     }
   }
-  post {
-      success {
-          mail to: 'ashishlata1995@gmail.com', subject: 'Pipeline succeed', body: "${env.BUILD_NUMBER}"
-
-      }
-      failure {
-          mail to: 'ashishlata1995@gmail.com', subject: 'Pipeline failed', body: "${env.BUILD_NUMBER}"
-        }
-    }
 }
