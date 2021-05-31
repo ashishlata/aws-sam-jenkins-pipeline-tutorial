@@ -16,7 +16,6 @@ pipeline {
       steps {
         sh """
         pip3 install virtualenv
-        sudo su
         python3 -m virtualenv venv 
         . venv/bin/activate
         pip3 install aws-sam-cli
