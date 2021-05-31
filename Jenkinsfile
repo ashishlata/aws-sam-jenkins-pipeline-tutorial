@@ -19,7 +19,7 @@ pipeline {
         python3 -m virtualenv venv 
         . venv/bin/activate
         pip3 install aws-sam-cli
-        mv -rf venv /var/lib/jenkins/
+        cp -rf venv /var/lib/jenkins/
         """
         stash includes: '**/venv/**/*', name: 'venv'
       }
