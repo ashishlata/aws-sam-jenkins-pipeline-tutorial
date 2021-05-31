@@ -4,8 +4,7 @@ import json
 
 
 def lambda_handler(event, context):
-    print('this is  service 1 for deployment testing')
-    print('this is  service 1 for deployment testing 123')
+    print('this is  service one for deployment testing')
 
     """Sample pure Lambda function
 
