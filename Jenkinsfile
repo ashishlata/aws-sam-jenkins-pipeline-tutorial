@@ -126,13 +126,13 @@ pipeline {
 
     }
   }
-  post {
+  /*post {
       success {
-          mail to: 'hemantlata321@gmail.com', subject: 'Pipeline successful', body: "${env.BUILD_NUMBER}"
+          mail to: 'ashishlata1995@gmail.com', subject: 'Pipeline succeed', body: "${env.BUILD_NUMBER}"
 
       }
       failure {
-          mail to: 'hemantlata321@gmail.com', subject: 'Pipeline failed', body: "${env.BUILD_NUMBER}"
+          mail to: 'ashishlata1995@gmail.com', subject: 'Pipeline failed', body: "${env.BUILD_NUMBER}"
         }
-    }
+    }*/
 }
