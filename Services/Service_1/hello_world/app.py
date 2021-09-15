@@ -5,6 +5,7 @@ import json
 
 def lambda_handler(event, context):
     print('this is  service one testing')
+    print('this is  service one final for demo testing')
 
     """Sample pure Lambda function
 
